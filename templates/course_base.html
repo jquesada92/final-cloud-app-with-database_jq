@@ -20,19 +20,22 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-            <a class="navbar-brand" href="{% url 'onlinecourse:index' %}">Course List</a>
-            <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                <li>
-                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                    <a class="btn btn-link" href="{% url 'onlinecourse:logout' %}">Logout</a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'onlinecourse:index' %}">onlinecourse<span class="sr-only"></span></a>
                 </li>
-                {% else %}
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">admin site</a>
+                </li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ml-auto">
+
                 <li>
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                    <a class="btn btn-link" href="{% url 'onlinecourse:logout' %}">Logout</a> {% else %}
                     <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
                         {% csrf_token %}
                         <div class="input-group">
@@ -45,10 +48,8 @@
                 </li>
                 {% endif %}
             </ul>
-        </div>
-        </div>
     </nav>
-
+    </div>
     {% block content %} {% endblock %}
 
 </body>
