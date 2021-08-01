@@ -1,0 +1,39 @@
+{% extends 'course_base.html' %} {% block content %}
+<div class="container-fluid">
+    {% if grade > 80 %}
+    <div class="alert alert-success">
+        <!--HINT Display passed info -->
+        Congratulation, {{ user.first_name }}! You have passed with score {{ grade }}/100
+    </div>
+    {% else %}
+    <div class="alert alert-danger">
+        <!--HINT Display failed info -->
+        Failed Sorry, {{ user.first_name }}! You have failed with score {{ grade }}/100
+    </div>
+    <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a> {% endif %}
+    <div class="card-columns-vertical mt-1">
+        <h5 class="">Exam results</h5>
+        {% for question in lesson.question_set.all %}
+        <div class="card mt-1">
+            <div class="card-header">
+                <h5>{{ question }}</h5>
+            </div>
+            <div class="card-body">
+                {% for choice in question.choice_set.all %} {% if choice.id in selected %} {% if choice.is_correct%}
+                <p class="alert alert-success"> Correct Answer -- {{choice}}
+                    <p>
+                        {% else %}
+                        <p class="alert alert-danger"> Wrong Answer -- {{choice}}
+                            <p>
+                                {% endif %} {% else %} {% if choice.is_correct %}
+                                <p class="alert alert-warning">{{choice}}--unselected correct answer
+                                    <p>
+                                        {% else %}
+                                        <p>{{choice}}
+                                            <p>
+                                                {% endif %} {% endif %} {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}

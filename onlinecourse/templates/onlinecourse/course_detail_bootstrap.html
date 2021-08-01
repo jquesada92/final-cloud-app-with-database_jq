@@ -1,0 +1,59 @@
+ {% extends 'course_base.html' %} {% block content %}
+<!-- Page content -->
+<div class="container-fluid">
+    <h2>{{ course.name }}</h2>
+    <div class="card-columns-vertical">
+        {% for lesson in course.lesson_set.all %}
+        <div class="card mt-1">
+            <div class="card-header">
+                <h5>Lesson {{ forloop.counter }} : {{lesson.title}}</h5>
+            </div>
+            <div class="card-body">{{lesson.content}}</div>
+
+            <!-- Task: show questions and choices -->
+            <!-- <HINT> Use Bootstrap Collapse to hide exam first, more details could be found here
+            https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
+
+            <button type="button" class="btn btn-primary accordion-button" data-bs-toggle="collapse" data-bs-target="#exam_{{ forloop.counter }}" aria-expanded="true" aria-controls="exam_{{ forloop.counter }}">Start Exam</button>
+
+            <div id="exam_{{ forloop.counter }}" class="collapse">
+                <!-- <HINT> If user is authenticated, show course exam with a list of question -->
+                {% if user.is_authenticated %}
+                <form id="questionform" action="submit/" method="post">
+                    <!--... for each question in the course ...-->
+                    <!-- <HINT> Each example will have many questions -->
+                    {% for question in lesson.question_set.all %}
+                    <div class="card mt-1">
+                        <div class="card-header">
+                            <h5>{{ question.question_text}}</h5>
+                        </div>
+                        {% csrf_token %}
+                        <div class="form-group" style='padding: 20px;'>
+                            <!--... for each choice in the question ...-->
+                            <!-- <HINT> Each question will have many choices -->
+                            {% for choice in question.choice_set.all %}
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                                <input type="checkbox" name="choice_{{choice.id}}"
+                                                    class="form-check-input" id="{{choice.id}}"
+                                                    value="{{choice.id}}">{{ choice.choice_text }}
+                                            </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <br>
+                    <input class="btn btn-success btn-lg btn-block" style="width:100%" type="submit" value="Submit">
+                    <br>
+                </form>
+
+                {% else %}
+                <p class="alert alert-danger">Login is required to access!!!</p> {% endif %}
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
