@@ -1,31 +1,31 @@
 {% extends 'course_base.html' %} {% block content %} {% if course_list %}
-<div class="d-flex  flex-row flex-wrap justify-content-center">
-    <div class="col-10 justify-content-center" style="width: 55%;">
-        <div class="card-deck">
-            {% for course in course_list %}
-            <div class="card">
-                <div class="card-body bg-light">
-                    <h5 class="card-title">{{ course.name }}, <span class="text-success">
+<div class="justify-content-center px-5" style="width: 100%;">
+    <div class="card-deck">
+        {% for course in course_list %}
+        <hr>
+        <div class="card">
+            <div class="card-body bg-light">
+                <h5 class="card-title">{{ course.name }}, <span class="text-success">
                                   {{ course.total_enrollment}} enrolled</span></h5>
-                    <div class='row' style="height:90%;">
-                        <div class='col-3'>
-                            <img class=" img-thumbnail " src="{{MEDIA_URL}}/{{ course.image }} " width="300px " height="300px " alt="Course image ">
-                        </div>
-                        <div class='col-9'>
-                            <p class="card-text overflow-auto ">{{ course.description}}</p>
-                        </div>
+                <div class='row' style="max-height: 235px;">
+                    <div class='col-xl-2 col-6'>
+                        <img class=" img-thumbnail" src="{{MEDIA_URL}}/{{ course.image }} " width="230px " height="230px " alt="Course image ">
+                    </div>
+                    <div class='col-xl-10 col-6 overflow-auto'>
+                        <p class="card-text overflow-auto" style="max-height: 230px;">{{ course.description }}</p>
                     </div>
                 </div>
-                <form action="{% url 'onlinecourse:enroll' course.id %} " method="post ">
-                    {% csrf_token %}
-                    <input class="btn btn-primary " style="width:100% " type="submit " value="{% if course.is_enrolled %}Enter{% else %}Enroll{% endif %} ">
-                </form>
             </div>
-            {% endfor %}
+            <br><br>
+            <form action="{% url 'onlinecourse:enroll' course.id %} " method="post ">
+                {% csrf_token %}
+                <input class="btn btn-primary " style="width:100% " type="submit " value="{% if course.is_enrolled %}Enter{% else %}Enroll{% endif %} ">
+            </form>
         </div>
+        <hr> {% endfor %}
     </div>
+</div>
 
-    {% else %}
-    <p>No courses are available.</p>
-    {% endif %}
-</div>{% endblock %}
+{% else %}
+<p>No courses are available.</p>
+{% endif %} {% endblock %}
