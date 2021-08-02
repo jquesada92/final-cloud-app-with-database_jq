@@ -6,6 +6,6 @@
     buildpack: python_buildpack
   - name: onlinecourse-nginx
     routes:
-      - route: jquesada.us-south.cf.appdomain.cloud/static
+      - route: jquesada.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
